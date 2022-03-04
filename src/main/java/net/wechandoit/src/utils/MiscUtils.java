@@ -15,12 +15,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static org.bukkit.Bukkit.getServer;
+
 public class MiscUtils {
 
     public static int getAmountOfStacks(int amount) {
         int count = amount / 64;
-        if (amount % 64 != 0)
-            count++;
+        if (amount % 64 != 0) count++;
         return count;
     }
 
@@ -40,7 +41,7 @@ public class MiscUtils {
         for (Drops drop : drops) {
             ItemStack itemStack = drop.getDrop(cook, looting);
             if (itemStack != null)
-            dropDrops(itemStack, multiplier * itemStack.getAmount(), dropLocation);
+                dropDrops(itemStack, multiplier * itemStack.getAmount(), dropLocation);
         }
     }
 
@@ -101,16 +102,19 @@ public class MiscUtils {
 
 
     public static boolean isPlayerOnIsland(Player player) {
-        SuperiorPlayer ssPlayer = SuperiorSkyblockAPI.getPlayer(player);
-        if (SuperiorSkyblockAPI.getPlayer(player).getIsland() == null)
-            return false;
-        if (SuperiorSkyblockAPI.getIslandAt(player.getLocation()) == null)
-            return false;
-        if (SuperiorSkyblockAPI.getIslandAt(player.getLocation()).getIslandMembers(true).isEmpty()) {
-            if (!SuperiorSkyblockAPI.getIslandAt(player.getLocation()).getIslandMembers().contains(ssPlayer))
+        if (isPluginOnServerAndEnabled("SuperiorSkyblock2")) {
+            SuperiorPlayer ssPlayer = SuperiorSkyblockAPI.getPlayer(player);
+            if (SuperiorSkyblockAPI.getPlayer(player).getIsland() == null)
                 return false;
+            if (SuperiorSkyblockAPI.getIslandAt(player.getLocation()) == null)
+                return false;
+            if (SuperiorSkyblockAPI.getIslandAt(player.getLocation()).getIslandMembers(true).isEmpty()) {
+                if (!SuperiorSkyblockAPI.getIslandAt(player.getLocation()).getIslandMembers().contains(ssPlayer))
+                    return false;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     private static double distance(Location loc1, Location loc2) {
@@ -130,16 +134,19 @@ public class MiscUtils {
     }
 
     public static boolean isStackable(Entity entity) {
-        return (isMythicMob(entity) ||
-                (entity instanceof LivingEntity && !entity.getType().name().equals("ARMOR_STAND") && !(entity instanceof Player) && !isNPC(entity)));
+        return (isMythicMob(entity) || (entity instanceof LivingEntity && !entity.getType().name().equals("ARMOR_STAND") && !(entity instanceof Player) && !isNPC(entity)));
     }
 
     public static boolean isNPC(Entity entity) {
-        return CitizensAPI.getNPCRegistry().isNPC(entity);
+        return isPluginOnServerAndEnabled("Citizens") && CitizensAPI.getNPCRegistry().isNPC(entity);
     }
 
     public static boolean isMythicMob(Entity entity) {
-        return MythicMobs.inst().getMobManager().isActiveMob(entity.getUniqueId());
+        return isPluginOnServerAndEnabled("MythicMobs") && MythicMobs.inst().getMobManager().isActiveMob(entity.getUniqueId());
+    }
+
+    public static boolean isPluginOnServerAndEnabled(String pluginName) {
+        return getServer().getPluginManager().getPlugin(pluginName) != null && getServer().getPluginManager().isPluginEnabled(pluginName);
     }
 
     public static <T extends Enum<T>> T getEnum(Class<T> enumType, String name) {

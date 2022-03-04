@@ -2,8 +2,6 @@ package net.wechandoit.src.listeners;
 
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.google.common.collect.Sets;
-import io.lumine.xikage.mythicmobs.MythicMobs;
-import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.minecraft.server.v1_12_R1.EntityCreature;
 import net.minecraft.server.v1_12_R1.PathfinderGoalSelector;
 import net.wechandoit.src.Main;
@@ -34,12 +32,6 @@ public class EntityListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         if (event.getEntity().getType() == EntityType.PLAYER) return;
-
-        ActiveMob activeMob = MythicMobs.inst().getMobManager().getMythicMobInstance(event.getEntity());
-        if (activeMob != null) {
-            if (activeMob.getType() != null)
-                return;
-        }
 
         if (event.getEntity() instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) event.getEntity();
@@ -86,27 +78,9 @@ public class EntityListeners implements Listener {
     }
 
     @EventHandler
-    public void onEntityTarget(EntityTargetLivingEntityEvent event){
-        if (event.getTarget() instanceof LivingEntity){
-            ActiveMob activeMob = MythicMobs.inst().getMobManager().getMythicMobInstance(event.getEntity());
-            if (activeMob != null) {
-                if (activeMob.getType() != null)
-                    return;
-            }
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         try {
             if (event.getEntity().getType() == EntityType.PLAYER) return;
-
-            ActiveMob activeMob = MythicMobs.inst().getMobManager().getMythicMobInstance(event.getEntity());
-            if (activeMob != null) {
-                if (activeMob.getType() != null)
-                    return;
-            }
 
             if (event.getEntity().getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.VOID)
                 event.getEntity().remove();
