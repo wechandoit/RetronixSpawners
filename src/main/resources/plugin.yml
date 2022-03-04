@@ -4,7 +4,7 @@ main: net.wechandoit.src.Main
 authors: [WeChanDoIt]
 description: Spawner Plugin
 depend: [StackMob, NBTAPI, Vault, SuperiorSkyblock2]
-softdepend: [WildStacker, UltimateStacker, ShopGUIPlus, SuperiorSkyblock2, Citizens, MythicMobs]
+softdepend: [WildStacker, UltimateStacker, ShopGUIPlus, Citizens, MythicMobs]
 commands:
   retronixspawners:
     description: Spawner command
