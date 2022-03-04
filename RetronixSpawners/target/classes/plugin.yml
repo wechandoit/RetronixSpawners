@@ -1,0 +1,10 @@
+name: RetronixSpawners
+version: 1.0
+main: net.wechandoit.src.Main
+authors: [WeChanDoIt]
+description: Spawner Plugin
+softdepend: [WildStacker, UltimateStacker, ShopGUIPlus, SuperiorSkyblock2, Vault]
+commands:
+  retronixspawners:
+    description: Spawner command
+    aliases: [retrospawners, retrospawner, retronixspawner, rs, stacker]
